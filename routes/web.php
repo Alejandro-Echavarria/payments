@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,11 @@ Route::get('articles', [ArticleController::class, 'index'])->name('articles.inde
 // Billing routes
 Route::get('billings', [BillingController::class, 'index'])->name('billings.index');
 Route::post('billings/addpaymentmethod', [BillingController::class, 'addPaymentMethod'])->name('billings.addpaymentmethod');
+Route::put('billings/defaultpaymentmethod', [BillingController::class, 'defaultPaymentMethod'])->name('billings.defaultpaymentmethod');
 Route::delete('billings/removepaymentmethod', [BillingController::class, 'removePaymentMethod'])->name('billings.removepaymentmethod');
+
+// Subscription routes
+Route::post('subscriptions', [SubscriptionController::class, 'newSubscription'])->name('subscriptions.store');
 
 // Otros --
 Route::middleware([

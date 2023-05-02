@@ -2,12 +2,14 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import Subscription from '@/Components/Subscription.vue';
 
 export default {
     components: {
         AppLayout,
         TextInput,
         InputError,
+        Subscription,
     },
 
     data() {
@@ -54,10 +56,16 @@ export default {
                 cardElement.clear();
                 this.errors.stripe = null;
 
-                this.$inertia.post(this.route('billings.addpaymentmethod'), setupIntent.payment_method);
+                this.$inertia.post(this.route('billings.addpaymentmethod'), setupIntent.payment_method, { preserveScroll: true });
             }
             this.disabled = false;
         });
+    },
+
+    methods: {
+        defaultpaymentmethod(id) {
+            this.$inertia.put(route('billings.defaultpaymentmethod'), id, {preserveScroll: true});
+        }
     },
 
     props: {
@@ -67,8 +75,7 @@ export default {
         },
         paymentMethods: {
             Object,
-        }
-
+        },
     }
 };
 </script>
@@ -79,6 +86,10 @@ export default {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="pb-4 px-4 sm:px-0">
                     <div class="grid grid-cols-1 gap-6">
+                        <Subscription>
+
+                        </Subscription>
+
                         <section class="bg-white overflow-hidden rounded-lg">
                             <div v-inertia-ignore class="px-6 py-4 space-y-3">
                                 <h1 class="text-gray-700 text-lg font-bold">Add payment method</h1>
@@ -123,31 +134,48 @@ export default {
                                 <h1 class="text-gray-700 text-lg font-bold">Payments method</h1>
                                 <div>
                                     <ul class="divide-y divide-gray-200">
-                                        <li 
-                                            v-for="paymentMethod in paymentMethods"
-                                            :key="'paymentMethod-' + paymentMethod.id" class="py-2 flex justify-between">
-                                            <div>
-                                                <p>
-                                                    <span class="font-bold">
-                                                        {{ paymentMethod.billing_details.name }}
-                                                    </span>
-                                                    ••••{{ paymentMethod.card.last4 }}
-                                                </p>
-                                                <p>
-                                                    Expira:
-                                                    {{ paymentMethod.card.exp_month }}/{{ paymentMethod.card.exp_year }}
-                                                </p>
-                                            </div>
-                                            <button
-                                                @click="$inertia.delete(route('billings.removepaymentmethod', paymentMethod.id))"
-                                                class="text-red-600/80">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                    fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                                </svg>
-                                            </button>
-                                        </li>
+                                        <TransitionGroup name="list">
+                                            <li v-for="paymentMethod in paymentMethods"
+                                                :key="'paymentMethod-' + paymentMethod.id"
+                                                class="py-2 flex justify-between">
+                                                <div>
+                                                    <p>
+                                                        <span class="font-bold">
+                                                            {{ paymentMethod.billing_details.name }}
+                                                        </span>
+                                                        ••••{{ paymentMethod.card.last4 }}
+                                                    </p>
+                                                    <p>
+                                                        Expira:
+                                                        {{ paymentMethod.card.exp_month }}/{{ paymentMethod.card.exp_year }}
+                                                    </p>
+                                                </div>
+
+                                                <div class="flex space-x-4">
+                                                    <button @click="defaultpaymentmethod(paymentMethod.id)" :class="`${$page.props.defaultPaymentMethod != null && $page.props.defaultPaymentMethod.id == paymentMethod.id
+                                                        ? 'text-green-600/80'
+                                                        : 'text-gray-400'}`">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            fill="currentColor" class="bi bi-bookmark-check-fill"
+                                                            viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd"
+                                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <button
+                                                        @click="$inertia.delete(route('billings.removepaymentmethod', paymentMethod.id), { preserveScroll: true })"
+                                                        class="text-red-600/80">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            fill="currentColor" class="bi bi-trash-fill"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </TransitionGroup>
                                     </ul>
                                 </div>
                             </div>
@@ -159,4 +187,15 @@ export default {
     </AppLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+</style>
