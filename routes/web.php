@@ -30,6 +30,8 @@ Route::delete('billings/removepaymentmethod', [BillingController::class, 'remove
 
 // Subscription routes
 Route::post('subscriptions', [SubscriptionController::class, 'newSubscription'])->name('subscriptions.store');
+Route::put('subscriptions/resumesubscription', [SubscriptionController::class, 'resumeSubscription'])->name('subscriptions.resumesubscription');
+Route::delete('subscriptions/cancelsubscription', [SubscriptionController::class, 'cancelSubscription'])->name('subscriptions.cancelsubscription');
 
 // Otros --
 Route::middleware([

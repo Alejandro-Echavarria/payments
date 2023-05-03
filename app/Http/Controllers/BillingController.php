@@ -17,12 +17,21 @@ class BillingController extends Controller
         $user = auth()->user();
 
         $defaultPaymentMethod = $user->defaultPaymentMethod();
-        $subscriptions = $user->subscriptions()->get('stripe_price');
+        $subscriptions = $user->subscriptions()->get();
+// return response()->json($subscriptions);
+        $subscriptionData = $subscriptions->map(function ($subscription) {
+            return [
+                'name' => $subscription->name,
+                'stripe_price' => $subscription->stripe_price,
+                'stripe_status' => $subscription->stripe_status,
+                'ends_at' => $subscription->ends_at
+            ];
+        });
 
         Inertia::share([
             'STRIPE_KEY'=> env('STRIPE_KEY'),
             'defaultPaymentMethod' => $defaultPaymentMethod,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptionData,
         ]);
 
         return Inertia::render('Billings/Index', [

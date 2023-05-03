@@ -1,16 +1,65 @@
 <script>
+import DangerButton from '@/Components/DangerButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+
 export default {
+    components: {
+        DangerButton,
+        SecondaryButton,
+    },
+
     methods: {
+        checkResumeSubscription(price) {
+            let data = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.ends_at !== null);
+            return data;
+        },
+
         newSubscription(plan) {
             this.$inertia.post(this.route('subscriptions.store'), {
                 id: plan,
+            }, {
+                preserveScroll: true,
+                preserveState: true
             });
         },
 
-        stripePrice(price) {
-            let valor = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price);
+        resumeSubscription(price) {
+            let data = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active' && obj.ends_at !== null);
 
-            return valor
+            if (data) {
+                this.$inertia.put(this.route('subscriptions.resumesubscription'), {
+                    name: data.name,
+                }, {
+                    preserveScroll: true,
+                    preserveState: true
+                });
+            } else {
+                alert('No se pudo reanudar la suscripción');
+            }
+        },
+
+        stripePrice(price) {
+            let valor = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active');
+            return valor;
+        },
+
+        cancelSubscription(price) {
+            let data = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active');
+
+            if (data) {
+                this.$inertia.delete(this.route('subscriptions.cancelsubscription', {
+                    name: data.name,
+                }), {
+                    preserveScroll: true,
+                    preserveState: true
+                });
+            } else {
+                alert('No se pudo cancelar la suscripción');
+            }
+        },
+
+        sentAlert(message) {
+            alert(message);
         }
     },
 }
@@ -90,11 +139,20 @@ export default {
                         </li>
                     </ul>
                     <template v-if="stripePrice('price_1N3Kk2Kx34527y4IlYk6ESrc')">
-                        <button
-                            class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer disabled:opacity-30"
-                            disabled>
-                            Suscrito
-                        </button>
+                        <div class="flex space-x-2">
+                            <p
+                                class="w-1/3 text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white">
+                                Suscrito
+                            </p>
+                            <SecondaryButton v-if="checkResumeSubscription('price_1N3Kk2Kx34527y4IlYk6ESrc')"
+                                @click="resumeSubscription('price_1N3Kk2Kx34527y4IlYk6ESrc')" class="w-full justify-center">
+                                Reanudar
+                            </SecondaryButton>
+                            <DangerButton v-else @click="cancelSubscription('price_1N3Kk2Kx34527y4IlYk6ESrc')"
+                                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer">
+                                Cancelar
+                            </DangerButton>
+                        </div>
                     </template>
                     <button v-else @click="newSubscription('price_1N3Kk2Kx34527y4IlYk6ESrc')"
                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900">
@@ -165,11 +223,20 @@ export default {
                         </li>
                     </ul>
                     <template v-if="stripePrice('price_1N3Kk2Kx34527y4I0irJD59l')">
-                        <button
-                            class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer disabled:opacity-30"
-                            disabled>
-                            Suscrito
-                        </button>
+                        <div class="flex space-x-2">
+                            <p
+                                class="w-1/3 text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white">
+                                Suscrito
+                            </p>
+                            <SecondaryButton v-if="checkResumeSubscription('price_1N3Kk2Kx34527y4I0irJD59l')"
+                                @click="resumeSubscription('price_1N3Kk2Kx34527y4I0irJD59l')" class="w-full justify-center">
+                                Reanudar
+                            </SecondaryButton>
+                            <DangerButton v-else @click="cancelSubscription('price_1N3Kk2Kx34527y4I0irJD59l')"
+                                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer">
+                                Cancelar
+                            </DangerButton>
+                        </div>
                     </template>
                     <button v-else @click="newSubscription('price_1N3Kk2Kx34527y4I0irJD59l')"
                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900">
@@ -240,17 +307,29 @@ export default {
                         </li>
                     </ul>
                     <template v-if="stripePrice('price_1N3Kk2Kx34527y4IwlNRhrz7')">
-                        <button
-                            class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer disabled:opacity-30"
-                            disabled>
-                            Suscrito
-                        </button>
+                        <div class="flex space-x-2">
+                            <p
+                                class="w-1/3 text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white">
+                                Suscrito
+                            </p>
+                            <SecondaryButton v-if="checkResumeSubscription('price_1N3Kk2Kx34527y4IwlNRhrz7')"
+                                @click="resumeSubscription('price_1N3Kk2Kx34527y4IwlNRhrz7')" class="w-full justify-center">
+                                Reanudar
+                            </SecondaryButton>
+                            <DangerButton v-else @click="cancelSubscription('price_1N3Kk2Kx34527y4IwlNRhrz7')"
+                                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900 cursor-pointer">
+                                Cancelar
+                            </DangerButton>
+                        </div>
                     </template>
                     <button v-else @click="newSubscription('price_1N3Kk2Kx34527y4IwlNRhrz7')"
                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900">
                         Get started
                     </button>
                 </div>
+            </div>
+            <div v-if="$page.props.jetstream.flash && $page.props.jetstream.flash.error">
+                {{ sentAlert($page.props.jetstream.flash.error.message) }}
             </div>
         </div>
     </section>
