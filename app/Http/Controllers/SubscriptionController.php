@@ -28,6 +28,7 @@ class SubscriptionController extends Controller
             $defaultPaymentMethod = $user->defaultPaymentMethod()->id;
 
             $user->newSubscription('Suscripciones blog', $request->id)
+                ->trialDays(60)
                 ->create($defaultPaymentMethod);
         } catch (\Exception $e) {
             return back()->with('flash', [

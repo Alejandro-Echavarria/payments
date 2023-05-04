@@ -1,11 +1,13 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
+import { Link } from '@inertiajs/vue3';
 
 export default {
     components: {
         AppLayout,
-        Pagination
+        Pagination,
+        Link,
     },
 
     methods: {
@@ -39,7 +41,9 @@ export default {
 
                             <div class="px-6 py-4">
                                 <h1 class="font-semibold text-xl mb-2">
-                                    {{ article.title }}
+                                    <Link :href="route('articles.show', article.id)" preserve-state>
+                                        {{ article.title }}
+                                    </Link>
                                 </h1>
                                 <p class="mt-2 text-gray-600 text-sm">
                                     {{ truncateDescription(article.extract) }}

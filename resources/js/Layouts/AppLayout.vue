@@ -48,11 +48,11 @@ const logout = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('products.index')" :active="route().current('products.index')">
+                                <NavLink :href="route('products.index')" :active="route().current('products.*')">
                                     Products
                                 </NavLink>
 
-                                <NavLink :href="route('articles.index')" :active="route().current('articles.index')">
+                                <NavLink :href="route('articles.index')" :active="route().current('articles.*')">
                                     Articles
                                 </NavLink>
 
@@ -220,11 +220,11 @@ const logout = () => {
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('products.index')" :active="route().current('products.index')">
+                        <ResponsiveNavLink :href="route('products.index')" :active="route().current('products.*')">
                             Products
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles.index')">
+                        <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles.*')">
                             Articles
                         </ResponsiveNavLink>
                         

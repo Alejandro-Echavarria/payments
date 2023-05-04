@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
@@ -19,19 +20,29 @@ use App\Http\Controllers\SubscriptionController;
 |
 */
 
+// Products
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
-Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-// Billing routes
+// Articles
+Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+
+// Billing
 Route::get('billings', [BillingController::class, 'index'])->name('billings.index');
 Route::post('billings/addpaymentmethod', [BillingController::class, 'addPaymentMethod'])->name('billings.addpaymentmethod');
 Route::put('billings/defaultpaymentmethod', [BillingController::class, 'defaultPaymentMethod'])->name('billings.defaultpaymentmethod');
 Route::delete('billings/removepaymentmethod', [BillingController::class, 'removePaymentMethod'])->name('billings.removepaymentmethod');
 
-// Subscription routes
+// Subscription
 Route::post('subscriptions', [SubscriptionController::class, 'newSubscription'])->name('subscriptions.store');
 Route::put('subscriptions/resumesubscription', [SubscriptionController::class, 'resumeSubscription'])->name('subscriptions.resumesubscription');
 Route::delete('subscriptions/cancelsubscription', [SubscriptionController::class, 'cancelSubscription'])->name('subscriptions.cancelsubscription');
+
+// Invoices
+Route::get('/user/invoice/{invoice}', function (Request $request, string $invoiceId) {
+    return $request->user()->downloadInvoice($invoiceId);
+});
 
 // Otros --
 Route::middleware([

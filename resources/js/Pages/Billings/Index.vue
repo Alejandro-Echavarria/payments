@@ -3,6 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import Subscription from '@/Components/Subscription.vue';
+import Invoices from '@/Components/Invoices.vue';
 
 export default {
     components: {
@@ -10,6 +11,7 @@ export default {
         TextInput,
         InputError,
         Subscription,
+        Invoices,
     },
 
     data() {
@@ -76,6 +78,9 @@ export default {
         paymentMethods: {
             Object,
         },
+        invoices: {
+            Object,
+        }
     }
 };
 </script>
@@ -86,13 +91,11 @@ export default {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="pb-4 px-4 sm:px-0">
                     <div class="grid grid-cols-1 gap-6">
-                        <Subscription>
-
-                        </Subscription>
+                        <Subscription />
 
                         <section class="bg-white overflow-hidden rounded-lg">
                             <div v-inertia-ignore class="px-6 py-4 space-y-3">
-                                <h1 class="text-gray-700 text-lg font-bold">Add payment method</h1>
+                                <h3 class="text-gray-700 text-lg font-bold">Add payment method</h3>
 
                                 <TextInput v-model="credict.name" id="card-holder-name" type="text"
                                     class="w-full p-2.5 text-sm" placeholder="Card holder name" />
@@ -131,7 +134,7 @@ export default {
 
                         <section class="bg-white overflow-hidden rounded-lg">
                             <div v-inertia-ignore class="px-6 py-4 space-y-3">
-                                <h1 class="text-gray-700 text-lg font-bold">Payments method</h1>
+                                <h3 class="text-gray-700 text-lg font-bold">Payments method</h3>
                                 <div>
                                     <ul class="divide-y divide-gray-200">
                                         <TransitionGroup name="list">
@@ -180,6 +183,8 @@ export default {
                                 </div>
                             </div>
                         </section>
+
+                        <Invoices :invoices="invoices" />
                     </div>
                 </div>
             </div>

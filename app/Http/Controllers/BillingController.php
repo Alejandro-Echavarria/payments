@@ -18,7 +18,8 @@ class BillingController extends Controller
 
         $defaultPaymentMethod = $user->defaultPaymentMethod();
         $subscriptions = $user->subscriptions()->get();
-// return response()->json($subscriptions);
+        $invoices = $user->invoices();
+
         $subscriptionData = $subscriptions->map(function ($subscription) {
             return [
                 'name' => $subscription->name,
@@ -37,6 +38,7 @@ class BillingController extends Controller
         return Inertia::render('Billings/Index', [
             'intent' => auth()->user()->createSetupIntent(),
             'paymentMethods' => auth()->user()->paymentMethods(),
+            'invoices' => $invoices,
         ]);
     }
 
