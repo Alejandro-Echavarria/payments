@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +40,16 @@ Route::post('subscriptions', [SubscriptionController::class, 'newSubscription'])
 Route::put('subscriptions/resumesubscription', [SubscriptionController::class, 'resumeSubscription'])->name('subscriptions.resumesubscription');
 Route::delete('subscriptions/cancelsubscription', [SubscriptionController::class, 'cancelSubscription'])->name('subscriptions.cancelsubscription');
 
+// Purchase
+Route::post('purchases/{product}', [PurchaseController::class, 'store'])->name('purchases.store');
+
 // Invoices
 Route::get('/user/invoice/{invoice}', function (Request $request, string $invoiceId) {
     return $request->user()->downloadInvoice($invoiceId);
 });
+
+// Thanks
+Route::view('/thanks', 'thanks')->name('thanks');
 
 // Otros --
 Route::middleware([

@@ -4,6 +4,8 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import Subscription from '@/Components/Subscription.vue';
 import Invoices from '@/Components/Invoices.vue';
+import PaymentsMethod from '@/Components/Payments/PaymentsMethod.vue';
+import AddPaymentMethod from '@/Components/Payments/AddPaymentMethod.vue';
 
 export default {
     components: {
@@ -12,6 +14,8 @@ export default {
         InputError,
         Subscription,
         Invoices,
+        PaymentsMethod,
+        AddPaymentMethod,
     },
 
     data() {
@@ -23,50 +27,6 @@ export default {
             errors: {
                 stripe: null,
             },
-        }
-    },
-
-    mounted() {
-        const stripe = Stripe(`${this.$inertia.page.props.STRIPE_KEY}`);
-        const elements = stripe.elements();
-        const cardElement = elements.create('card');
-
-        cardElement.mount('#card-element');
-
-        const cardHolderName = document.getElementById('card-holder-name');
-        const cardButton = document.getElementById('card-button');
-
-        cardButton.addEventListener('click', async (e) => {
-
-            this.disabled = true;
-            const clientSecret = cardButton.dataset.secret;
-
-            const { setupIntent, error } = await stripe.confirmCardSetup(
-                clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: { name: cardHolderName.value }
-                }
-            });
-
-            if (error) {
-                // Display "error.message" to the user...
-                this.errors.stripe = error.message;
-            } else {
-                // The card has been verified successfully...
-                cardHolderName.value = '';
-                cardElement.clear();
-                this.errors.stripe = null;
-
-                this.$inertia.post(this.route('billings.addpaymentmethod'), setupIntent.payment_method, { preserveScroll: true });
-            }
-            this.disabled = false;
-        });
-    },
-
-    methods: {
-        defaultpaymentmethod(id) {
-            this.$inertia.put(route('billings.defaultpaymentmethod'), id, {preserveScroll: true});
         }
     },
 
@@ -92,11 +52,9 @@ export default {
                 <div class="pb-4 px-4 sm:px-0">
                     <div class="grid grid-cols-1 gap-6">
                         <Subscription />
-
                         <section class="bg-white overflow-hidden rounded-lg">
                             <div v-inertia-ignore class="px-6 py-4 space-y-3">
                                 <h3 class="text-gray-700 text-lg font-bold">Add payment method</h3>
-
                                 <TextInput v-model="credict.name" id="card-holder-name" type="text"
                                     class="w-full p-2.5 text-sm" placeholder="Card holder name" />
 
@@ -104,10 +62,8 @@ export default {
                                 <div id="card-element"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-700 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 peer transition">
                                 </div>
-
                                 <InputError :message="errors.stripe" class="mt-2" />
                             </div>
-
                             <footer class="px-6 py-4 h-16 border-t border-gray-200">
                                 <div class="flex justify-end">
                                     <button id="card-button"
@@ -131,59 +87,8 @@ export default {
                                 </div>
                             </footer>
                         </section>
-
-                        <section class="bg-white overflow-hidden rounded-lg">
-                            <div v-inertia-ignore class="px-6 py-4 space-y-3">
-                                <h3 class="text-gray-700 text-lg font-bold">Payments method</h3>
-                                <div>
-                                    <ul class="divide-y divide-gray-200">
-                                        <TransitionGroup name="list">
-                                            <li v-for="paymentMethod in paymentMethods"
-                                                :key="'paymentMethod-' + paymentMethod.id"
-                                                class="py-2 flex justify-between">
-                                                <div>
-                                                    <p>
-                                                        <span class="font-bold">
-                                                            {{ paymentMethod.billing_details.name }}
-                                                        </span>
-                                                        ••••{{ paymentMethod.card.last4 }}
-                                                    </p>
-                                                    <p>
-                                                        Expira:
-                                                        {{ paymentMethod.card.exp_month }}/{{ paymentMethod.card.exp_year }}
-                                                    </p>
-                                                </div>
-
-                                                <div class="flex space-x-4">
-                                                    <button @click="defaultpaymentmethod(paymentMethod.id)" :class="`${$page.props.defaultPaymentMethod != null && $page.props.defaultPaymentMethod.id == paymentMethod.id
-                                                        ? 'text-green-600/80'
-                                                        : 'text-gray-400'}`">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            fill="currentColor" class="bi bi-bookmark-check-fill"
-                                                            viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd"
-                                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
-                                                        </svg>
-                                                    </button>
-
-                                                    <button
-                                                        @click="$inertia.delete(route('billings.removepaymentmethod', paymentMethod.id), { preserveScroll: true })"
-                                                        class="text-red-600/80">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            fill="currentColor" class="bi bi-trash-fill"
-                                                            viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </li>
-                                        </TransitionGroup>
-                                    </ul>
-                                </div>
-                            </div>
-                        </section>
-
+                        <!-- <AddPaymentMethod :intent="intent" :stripekey="`${$page.props.STRIPE_KEY}`" /> -->
+                        <PaymentsMethod :paymentMethods="paymentMethods" />
                         <Invoices :invoices="invoices" />
                     </div>
                 </div>
@@ -192,15 +97,4 @@ export default {
     </AppLayout>
 </template>
 
-<style scoped>
-.list-enter-active,
-.list-leave-active {
-    transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-}
-</style>
+<style scoped></style>
