@@ -2,22 +2,18 @@
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import { router } from '@inertiajs/vue3';
-import { reactive } from 'vue';
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 
-defineProps({
-    intent: {
-        type: Object,
-        required: true
-    },
-    stripekey: {
-        type: String,
-        required: true
+const state = reactive({
+    name: '',
+    disabled: false,
+    errors: {
+        stripe: null
     }
 });
 
-onMounted((stripekey, disabled, errors) => {
-    const stripe = Stripe(`${stripekey}`);
+onMounted(() => {
+    const stripe = Stripe(`${props.stripekey}`);
     const elements = stripe.elements();
     const cardElement = elements.create('card');
 
@@ -28,7 +24,7 @@ onMounted((stripekey, disabled, errors) => {
 
     cardButton.addEventListener('click', async (e) => {
 
-        disabled = true;
+        state.disabled = true;
         const clientSecret = cardButton.dataset.secret;
 
         const { setupIntent, error } = await stripe.confirmCardSetup(
@@ -41,29 +37,31 @@ onMounted((stripekey, disabled, errors) => {
 
         if (error) {
             // Display "error.message" to the user...
-            // errors.stripe = error.message;
+            state.errors.stripe = error.message;
         } else {
             // The card has been verified successfully...
             cardHolderName.value = '';
             cardElement.clear();
-            // errors.stripe = null;
+            state.errors.stripe = null;
 
-            router.post(this.route('billings.addpaymentmethod'), setupIntent.payment_method, {
+            router.post(route('billings.addpaymentmethod'), setupIntent.payment_method, {
                 preserveScroll: true
             });
         }
-        disabled = false;
+        state.disabled = false;
     });
 });
 
-reactive({
-    name: '',
-    disbabled: false,
-    errors: {
-        stripe: null
+const props = defineProps({
+    intent: {
+        type: Object,
+        required: true
+    },
+    stripekey: {
+        type: String,
+        required: true
     }
 });
-
 </script>
 
 <template>
@@ -83,8 +81,8 @@ reactive({
             <div class="flex justify-end">
                 <button id="card-button"
                     class="hover:border-b-2 font-medium text-blue-600 dark:text-blue-500 hover:border-gray-300 focus:outline-none transition duration-150 ease-in-out disabled:opacity-50"
-                    :data-secret="`${intent.client_secret}`" :disabled="disabled">
-                    <span v-if="disabled" class="flex items-center justify-center space-x-2">
+                    :data-secret="`${intent.client_secret}`" :disabled="state.disabled">
+                    <span v-if="state.disabled" class="flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">

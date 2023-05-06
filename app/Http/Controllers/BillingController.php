@@ -30,7 +30,7 @@ class BillingController extends Controller
         });
 
         Inertia::share([
-            'STRIPE_KEY'=> env('STRIPE_KEY'),
+            'STRIPE_KEY' => config('stripe.stripe_key'),
             'defaultPaymentMethod' => $defaultPaymentMethod,
             'subscriptions' => $subscriptionData,
         ]);
