@@ -51,9 +51,6 @@ export default {
                     </div>
                 </div>
             </div>
-            <pre>
-                {{ $page.props.subscriptions }}
-            </pre>
         </div>
     </AppLayout>
 </template>
