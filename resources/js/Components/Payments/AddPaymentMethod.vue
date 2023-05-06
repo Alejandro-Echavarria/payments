@@ -75,7 +75,7 @@ const props = defineProps({
             <div id="card-element"
                 class="block py-2.5 px-0 w-full text-sm text-gray-700 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 peer transition">
             </div>
-            <!-- <InputError :message="errors.stripe" class="mt-2" /> -->
+            <InputError :message="state.errors.stripe" class="mt-2" />
         </div>
         <footer class="px-6 py-4 h-16 border-t border-gray-200">
             <div class="flex justify-end">

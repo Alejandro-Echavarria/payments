@@ -4,6 +4,7 @@ import Banner from '@/Components/Banner.vue';
 import PaymentsMethod from '@/Components/Payments/PaymentsMethod.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
+import AddPaymentMethod from '@/Components/Payments/AddPaymentMethod.vue';
 
 export default {
     components: {
@@ -12,6 +13,7 @@ export default {
         PaymentsMethod,
         PrimaryButton,
         InputError,
+        AddPaymentMethod,
     },
 
     data() {
@@ -19,7 +21,8 @@ export default {
             disabled: false,
             errors: {
                 stripe: null
-            }
+            },
+            stripekey: this.$inertia.page.props.STRIPE_KEY,
         };
     },
 
@@ -48,7 +51,11 @@ export default {
         },
         paymentMethods: {
             type: Object,
-        }
+        },
+        intent: {
+            Object,
+            required: true
+        },
     }
 }
 </script>
@@ -80,6 +87,7 @@ export default {
                                 </p>
                             </div>
                             <div class="col-span-12 md:col-span-5">
+                                <AddPaymentMethod :intent="intent" :stripekey="`${stripekey}`" />
                                 <PaymentsMethod :paymentMethods="paymentMethods" />
                                 <InputError :message="errors.stripe" class="mt-2 flex justify-end px-6 pb-4" />
                                 <div class="flex justify-end px-6 pb-4">

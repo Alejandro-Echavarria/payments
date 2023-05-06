@@ -8,6 +8,11 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['show']);
+    }
+
     public function index()
     {
         $products = Product::paginate(9);
@@ -20,7 +25,11 @@ class ProductController extends Controller
         $user = auth()->user();
         $paymentMethods = $user->paymentMethods();
         $defaultPaymentMethod = $user->defaultPaymentMethod();
+        $intent = $user->createSetupIntent();
+        $STRIPE_KEY = config('stripe.stripe_key');
 
-        return Inertia::render('Products/Show', compact('product', 'paymentMethods', 'defaultPaymentMethod'));
+        return Inertia::render('Products/Show', compact([
+            'product', 'paymentMethods', 'defaultPaymentMethod', 'intent', 'STRIPE_KEY'
+        ]));
     }
 }

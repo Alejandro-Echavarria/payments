@@ -24,7 +24,11 @@ export default {
         },
 
         resumeSubscription(price) {
-            let data = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active' && obj.ends_at !== null);
+            let data = this.$inertia.page.props.subscriptions.find(
+                obj => obj.stripe_price === price
+                    && (obj.stripe_status === 'active' || obj.stripe_status === 'trialing')
+                    && obj.ends_at !== null
+            );
 
             if (data) {
                 this.$inertia.put(this.route('subscriptions.resumesubscription'), {
@@ -39,12 +43,18 @@ export default {
         },
 
         stripePrice(price) {
-            let valor = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active');
+            let valor = this.$inertia.page.props.subscriptions.find(
+                obj => obj.stripe_price === price
+                    && (obj.stripe_status === 'active' || obj.stripe_status === 'trialing')
+            );
             return valor;
         },
 
         cancelSubscription(price) {
-            let data = this.$inertia.page.props.subscriptions.find(obj => obj.stripe_price === price && obj.stripe_status === 'active');
+            let data = this.$inertia.page.props.subscriptions.find(
+                obj => obj.stripe_price === price
+                    && (obj.stripe_status === 'active' || obj.stripe_status === 'trialing')
+            );
 
             if (data) {
                 this.$inertia.delete(this.route('subscriptions.cancelsubscription', {
