@@ -9,6 +9,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\WebHookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,9 @@ Route::get('/user/invoice/{invoice}', function (Request $request, string $invoic
 
 // Thanks
 Route::view('/thanks', 'thanks')->name('thanks');
+
+// Stripe
+Route::post('stripe/webhook', [WebHookController::class, 'handleWebhook'])->name('webhook');
 
 // Otros --
 Route::middleware([
