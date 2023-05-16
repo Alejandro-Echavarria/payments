@@ -18,7 +18,7 @@ class ArticleFactory extends Factory
     {
         return [
             'title'   => $this->faker->sentence,
-            'image'   => $this->faker->imageUrl(640, 480, 'cats', true),
+            'image'   => $this->faker->imageUrl(640, 480, 'cars', true),
             'extract' => $this->faker->paragraph,
             'body'    => $this->faker->paragraph(3, true)
         ];

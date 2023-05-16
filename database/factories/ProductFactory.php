@@ -18,7 +18,7 @@ class ProductFactory extends Factory
     {
         return [
             'title'      => $this->faker->sentence,
-            'image'       => $this->faker->imageUrl(640, 480, 'cats', true),
+            'image'       => $this->faker->imageUrl(640, 480, 'cars', true),
             'description' => $this->faker->paragraph,
             'price'       => $this->faker->randomElement([9.99, 19.99, 29.99, 39.99, 49.99])
         ];
