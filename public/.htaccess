@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Redirect from www to domain
+    RewriteCond %{HTTP_HOST} ^www.payments.maet.dev [NC]
+    RewriteRule ^(.*)$ http://payments.maet.dev/$1 [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
