@@ -77,10 +77,10 @@ const props = defineProps({
             </div>
             <InputError :message="state.errors.stripe" class="mt-2" />
         </div>
-        <footer class="px-6 py-4 h-16 border-t border-gray-200">
+        <footer class="px-6 py-4 h-auto border-t border-gray-200">
             <div class="flex justify-end">
                 <button id="card-button"
-                    class="hover:border-b-2 font-medium text-blue-600 dark:text-blue-500 hover:border-gray-300 focus:outline-none transition duration-150 ease-in-out disabled:opacity-50"
+                    class="font-medium text-blue-600 dark:text-blue-500 hover:border-gray-300 focus:outline-none transition duration-150 ease-in-out disabled:opacity-50"
                     :data-secret="`${intent.client_secret}`" :disabled="state.disabled">
                     <span v-if="state.disabled" class="flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -98,8 +98,98 @@ const props = defineProps({
                     </span>
                 </button>
             </div>
-        </footer>
-    </section>
-</template>
+            <template v-if="route().current('billings.index')">
+                <div class="my-6 overflow-x-auto">
+                    <h3 class="text-gray-700 text-lg font-bold">Credit cards (Test)</h3>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card
+                                    Type
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card
+                                    Number</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CVV
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Expiration Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">Visa</td>
+                                <td class="px-6 py-4 whitespace-nowrap">4242424242424242</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any 3 digits</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any future date</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">Visa (debit)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">4000056655665556</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any 3 digits</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any future date</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">Mastercard</td>
+                                <td class="px-6 py-4 whitespace-nowrap">5555555555554444</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any 3 digits</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any future date</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">Mastercard (2-series)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">2223003122003222</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any 3 digits</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Any future date</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="my-6 overflow-x-auto">
+                    <h3 class="text-gray-700 text-lg font-bold">Declined Payments</h3>
+                    <div class="container mx-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Error</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Card Number</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Error Code</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Error Message</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Generic decline</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">4000000000000002</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">card_declined</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">generic_decline</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Insufficient funds decline</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">4000000000009995</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">card_declined</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">insufficient_funds</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Lost card decline</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">4000000000009987</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">card_declined</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">lost_card</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Stolen card decline</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">4000000000009979</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">card_declined</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">stolen_card</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+    </footer>
+</section></template>
 
 <style scoped></style>
