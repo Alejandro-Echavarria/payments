@@ -32,4 +32,9 @@ class ProductController extends Controller
             'product', 'paymentMethods', 'defaultPaymentMethod', 'intent', 'STRIPE_KEY'
         ]));
     }
+
+    public function admin()
+    {
+        return Inertia::render('Products/Admin');
+    }
 }

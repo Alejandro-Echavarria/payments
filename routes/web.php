@@ -24,6 +24,7 @@ use App\Http\Controllers\WebHookController;
 
 // Products
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
+Route::get('products/admin', [ProductController::class, 'admin'])->name('products.admin');
 Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 // Articles
