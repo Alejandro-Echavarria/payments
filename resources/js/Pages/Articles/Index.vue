@@ -34,7 +34,7 @@ export default {
     <AppLayout title="Articles">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="sm:px-0 space-y-6">
+                <div class="pb-4 px-4 sm:px-0 space-y-6">
                     <div class="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <template v-for="article in articles.data" :key="'article-' + article.id">
                             <div class="bg-gray-100/80 rounded-xl overflow-hidden">

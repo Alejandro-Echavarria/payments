@@ -37,7 +37,7 @@ const logout = () => {
         <div class="min-h-screen">
             <nav class="bg-white z-50 sticky top-0">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-full mx-auto px-6 sm:px-6 lg:px-6 xl:px-8 2xl:px-16">
+                <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 2xl:px-16">
                     <div class="flex justify-between h-16">
                         <div class="flex w-full">
                             <!-- Logo -->
