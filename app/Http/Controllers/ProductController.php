@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['show']);
+        $this->middleware(['auth', 'verified'])->only(['show']);
     }
 
     public function index()

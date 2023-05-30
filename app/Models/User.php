@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 use function Illuminate\Events\queueable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;

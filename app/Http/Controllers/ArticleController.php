@@ -10,7 +10,7 @@ class ArticleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'ensureUserSuscribed'])->only(['show']);
+        $this->middleware(['auth', 'verified', 'ensureUserSuscribed'])->only(['show']);
     }
 
     public function index()
