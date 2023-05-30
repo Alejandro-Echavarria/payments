@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <footer class="py-4 backdrop-blur-md bg-white/80 dark:bg-transparent border-t-2 dark:border-gray-600">
-        <div class="max-w-full mx-auto px-6 sm:px-6 lg:px-6 xl:px-8 2xl:px-16">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 2xl:px-16">
             <div class="md:flex md:justify-between">
                 <div class="mb-6 md:mb-0">
                     <Link :href="route('products.index')" class="flex-shrink-0">
