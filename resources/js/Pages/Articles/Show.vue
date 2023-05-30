@@ -23,7 +23,7 @@ export default {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="pb-4 px-4 sm:px-0 space-y-6">
                     <section class="bg-white overflow-hidden rounded-lg">
-                        <div class="px-6 py-4 space-y-3">
+                        <div class="space-y-3">
                             <h1 class="text-gray-700 text-3xl font-bold">{{ article.title }}</h1>
 
                             <div>
