@@ -27,7 +27,7 @@ export default {
 <template>
     <section class="bg-white overflow-hidden rounded-lg">
         <div class="relative overflow-x-auto sm:rounded-lg">
-            <h3 class="px-6 py-4 space-y-3 text-gray-700 text-lg font-bold">Invoices</h3>
+            <h3 class="py-4 space-y-3 text-gray-700 text-lg font-bold">Invoices</h3>
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase dark:text-gray-400 border-y-2">
                     <tr>

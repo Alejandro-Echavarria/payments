@@ -43,7 +43,7 @@ export default {
                 <div class="pb-4 px-4 sm:px-0">
                     <div class="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <template v-for="product in products.data" :key="'product-' + product.id">
-                            <div class="bg-white rounded-xl overflow-hidden">
+                            <div class="bg-gray-100/80 rounded-xl overflow-hidden">
                                 <div class="h-56 bg-cover bg-center px-6 py-4"
                                     :style="`background-image: url(${product.image});`">
                                     <span

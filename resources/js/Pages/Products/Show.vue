@@ -66,19 +66,18 @@ export default {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="pb-4 px-4 sm:px-0 space-y-6">
                     <section class="bg-white overflow-hidden rounded-lg">
-                        <div class="grid grid-cols-12 gap-6">
-                            <div class="col-span-12 md:col-span-7 px-6 py-4 space-y-3">
+                        <div class="grid grid-cols-12 gap-8">
+                            <div class="col-span-12 md:col-span-7 space-y-3">
                                 <div class="flex space-x-2">
-                                    <figure>
-                                        <img :src="product.image" class="w-48 h-28 object-cover object-center rounded-lg"
+                                    <figure class="w-full">
+                                        <img :src="product.image" class="w-full h-80 object-cover object-center rounded-lg"
                                             alt="">
                                     </figure>
-                                    <div>
-                                        <h1 class="text-gray-700 text-xl font-bold">{{ product.title }}</h1>
-                                        <p class="text-gray-700 text-sm">${{ product.price }} USD</p>
-                                    </div>
                                 </div>
-                                <hr class="my-4">
+                                <div>
+                                    <h1 class="text-gray-700 text-xl font-bold">{{ product.title }}</h1>
+                                    <p class="text-gray-700 text-sm">${{ product.price }} USD</p>
+                                </div>
                                 <p>
                                     Lorem ipsum dolor sit amet consectetur
                                     adipisicing elit. Facilis ratione explicabo repellendus. Quae et corporis illo
@@ -89,8 +88,8 @@ export default {
                             <div class="col-span-12 md:col-span-5">
                                 <AddPaymentMethod :intent="intent" :stripekey="`${stripekey}`" />
                                 <PaymentsMethod :paymentMethods="paymentMethods" />
-                                <InputError :message="errors.stripe" class="mt-2 flex justify-end px-6 pb-4" />
-                                <div class="flex justify-end px-6 pb-4">
+                                <InputError :message="errors.stripe" class="mt-2 flex justify-end" />
+                                <div class="flex justify-end">
                                     <PrimaryButton @click="purchase" :disabled="disabled">
                                         <span v-if="disabled" class="flex items-center justify-center space-x-2">
                                             <svg class="w-5 h-5 animate-spin text-blue-500"

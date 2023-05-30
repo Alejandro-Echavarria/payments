@@ -66,7 +66,7 @@ const props = defineProps({
 
 <template>
     <section class="bg-white overflow-hidden rounded-lg">
-        <div v-inertia-ignore class="px-6 py-4 space-y-3">
+        <div v-inertia-ignore class="space-y-3">
             <h3 class="text-gray-700 text-lg font-bold">Add payment method</h3>
             <TextInput v-model="name" id="card-holder-name" type="text" class="w-full p-2.5 text-sm"
                 placeholder="Card holder name" />
@@ -77,7 +77,7 @@ const props = defineProps({
             </div>
             <InputError :message="state.errors.stripe" class="mt-2" />
         </div>
-        <footer class="px-6 py-4 h-auto border-t border-gray-200">
+        <footer class="py-8 h-auto">
             <div class="flex justify-end">
                 <button id="card-button"
                     class="font-medium text-blue-600 dark:text-blue-500 hover:border-gray-300 focus:outline-none transition duration-150 ease-in-out disabled:opacity-50"

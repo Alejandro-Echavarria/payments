@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <Link :href="'/'">
-        <svg
+    <!-- <svg
             class="w-16 h-16"
             viewBox="0 0 48 48"
             fill="none"
@@ -12,6 +12,16 @@ import { Link } from '@inertiajs/vue3';
         >
             <path d="M11.395 44.428C4.557 40.198 0 32.632 0 24 0 10.745 10.745 0 24 0a23.891 23.891 0 0113.997 4.502c-.2 17.907-11.097 33.245-26.602 39.926z" fill="#6875F5" />
             <path d="M14.134 45.885A23.914 23.914 0 0024 48c13.255 0 24-10.745 24-24 0-3.516-.756-6.856-2.115-9.866-4.659 15.143-16.608 27.092-31.75 31.751z" fill="#6875F5" />
-        </svg>
+        </svg> -->
+        <div class="flex">
+            <div class="items-center">
+                <p class="font-bold dark:text-gray-200 text-gray-700"><span class="h-12 w-12">MAET</span> - Payments</p>
+            </div>
+            <div class="shrink-0 flex items-center ml-3">
+                <span class="text-nowrap bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                    Test
+                </span>
+            </div>
+        </div>
     </Link>
 </template>
